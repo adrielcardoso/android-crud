@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:padding="20dp"
+        android:layout_height="match_parent">
+        
+        <EditText
+            android:id="@+id/descricao"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/st_descricao"/>
+
+        <RadioGroup
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/escolha"
+            android:orientation="vertical">
+            <RadioButton
+                android:id="@+id/stentrada"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/stentrada"/>
+
+            <RadioButton
+                android:id="@+id/stpraprincipal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/stpraprincipal"/>
+
+            <RadioButton android:id="@+id/stsobremesa"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/stsobremesa"/>
+
+            <RadioButton android:id="@+id/stlanche"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/stlanche"/>
+        </RadioGroup>
+
+        <RatingBar
+            android:layout_margin="20dp"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ratingBar" />
+
+        <Button
+            android:text="@string/foto"
+            android:id="@+id/foto"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:src="@drawable/semimagem"
+            android:id="@+id/iamgebatida"
+            android:layout_margin="10dp"
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/buttonSalvar"
+            android:text="@string/buttonSalvar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+</ScrollView>

@@ -2,9 +2,14 @@ package adrielcardoso.com.br.aulaphoto;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -36,11 +41,14 @@ public class CreateActivity extends AppCompatActivity implements View.OnClickLis
     RadioGroup radioGroup;
     RatingBar ratingBar;
     RangoDAO rangoDao;
+    String lat, lon;
+    GPSTracker gps;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.rangoDao = new RangoDAO(this);
+        gps = new GPSTracker(this);
 
         setContentView(R.layout.activity_create);
 
@@ -62,35 +70,44 @@ public class CreateActivity extends AppCompatActivity implements View.OnClickLis
 
     public void parseSave()
     {
-        boolean permission = true;
 
-        if(descricao.getText().toString().trim().equals("")){
-            descricao.setError("Defina uma curta descrição");
-            permission = false;
-        }
+        if(gps.canGetLocation()) {
 
-        if(radioGroup.getCheckedRadioButtonId() < 1){
-            permission = false;
-            Toast.makeText(this, "Selecione uma das opções", Toast.LENGTH_SHORT).show();
-        }
+            gps.showSettingsAlert();
+        }else {
 
+            boolean permission = true;
 
-        if(permission){
+            if (descricao.getText().toString().trim().equals("")) {
+                descricao.setError("Defina uma curta descrição");
+                permission = false;
+            }
 
-            int selectedId = radioGroup.getCheckedRadioButtonId();
+            if (radioGroup.getCheckedRadioButtonId() < 1) {
+                permission = false;
+                Toast.makeText(this, "Selecione uma das opções", Toast.LENGTH_SHORT).show();
+            }
 
-            RadioButton radioButton = (RadioButton) findViewById(selectedId);
+            if (permission) {
 
-            RangoEntity model = new RangoEntity(
-                    descricao.getText().toString(),
-                    radioButton.getText().toString(),
-                    String.valueOf(ratingBar.getRating()),
-                    mCurrentPhotoPath
-            );
+                int selectedId = radioGroup.getCheckedRadioButtonId();
 
-            if(rangoDao.insert(model)){
-                setResult(RESULT_OK);
-                finish();
+                RadioButton radioButton = (RadioButton) findViewById(selectedId);
+
+                RangoEntity model = new RangoEntity(
+                        descricao.getText().toString(),
+                        radioButton.getText().toString(),
+                        String.valueOf(ratingBar.getRating()),
+                        mCurrentPhotoPath,
+                        String.valueOf(gps.getLatitude()), String.valueOf(gps.getLongitude())
+                );
+
+                Log.i("LOCATION", String.valueOf(gps.getLatitude()) +" "+ String.valueOf(gps.getLongitude()));
+
+                if (rangoDao.insert(model)) {
+                    setResult(RESULT_OK);
+                    finish();
+                }
             }
         }
 
@@ -167,6 +184,11 @@ public class CreateActivity extends AppCompatActivity implements View.OnClickLis
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             imageView.setImageBitmap(imageBitmap);
         }
+    }
+
+    private void turnGPSOn(){
+        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+        startActivity(intent);
     }
 
 }

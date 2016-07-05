@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Registrando o Rango</string>
+    <string name="app_name">Aula Geo</string>
 
     <string name="st_descricao">Descrição...</string>
     <string name="stentrada">Entrada</string>
@@ -8,4 +8,6 @@
     <string name="stlanche">Lanche</string>
     <string name="foto">Foto</string>
     <string name="buttonSalvar">Salvar</string>
+
+    <string name="google_maps">AIzaSyAWhMULdBRvdNSqYqlngPRZeaRMUMAh2qw</string>
 </resources>

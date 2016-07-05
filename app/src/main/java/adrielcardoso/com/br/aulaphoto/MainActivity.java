@@ -1,8 +1,10 @@
 package adrielcardoso.com.br.aulaphoto;
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -13,26 +15,33 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+
 import java.util.ArrayList;
+import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
-
+public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     RangoDAO rangoDAO;
-    TextView message;
-    ArrayList<RangoEntity> items = new ArrayList<RangoEntity>();
-    ListView listView;
+    private SupportMapFragment mapFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        new Banco(this);
         setContentView(R.layout.activity_main);
         rangoDAO = new RangoDAO(this);
 
-        message = (TextView) findViewById(R.id.message);
-        listView = (ListView) findViewById(R.id.listView);
-
-        setListView();
+        mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
     }
 
     @Override
@@ -57,45 +66,30 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if(resultCode == RESULT_OK){
-            setListView();
+            mapFragment.getMapAsync(this);
         }
     }
 
-    public void setListView()
+    public void setListView(GoogleMap map)
     {
 
         Cursor data = rangoDAO.selectAll();
 
-        if(data.getCount() == 0){
-
-            listView.setVisibility(View.INVISIBLE);
-            message.setVisibility(View.VISIBLE); // set message
-
-        }else {
-
-            listView.setVisibility(View.VISIBLE);
-            message.setVisibility(View.GONE);
-
-            items = new ArrayList<RangoEntity>();
+        if(data.getCount() != 0){
 
             data.moveToFirst();
+
             while (!data.isAfterLast()) {
 
-                RangoEntity entity = new RangoEntity();
+                String lat = data.getString(data.getColumnIndexOrThrow(RangoDAO.lat));
+                String log = data.getString(data.getColumnIndexOrThrow(RangoDAO.lon));
+                String title = data.getString(data.getColumnIndexOrThrow(RangoDAO.descricao));
 
-                entity.setStDescricao(data.getString(data.getColumnIndexOrThrow(RangoDAO.descricao)));
-                entity.setPathFoto(data.getString(data.getColumnIndexOrThrow(RangoDAO.foto)));
-                entity.setStPonto(data.getString(data.getColumnIndexOrThrow(RangoDAO.ponto)));
-                entity.setStTipo(data.getString(data.getColumnIndexOrThrow(RangoDAO.tipo)));
-
-                items.add(entity);
-
+                Marker marker = map.addMarker(new MarkerOptions().position(new LatLng(Float.parseFloat(lat), Float.parseFloat(log)))
+                        .title(title));
                 data.moveToNext();
             }
 
-            ListaArrayAdapter adapter = new ListaArrayAdapter(this, items);
-
-            listView.setAdapter(adapter);
         }
 
     }
@@ -105,5 +99,12 @@ public class MainActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main, menu);
         return true;
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+
+        Log.i("CALL", "CHAMANDO");
+        setListView(googleMap);
     }
 }

@@ -21,7 +21,9 @@ public class Banco extends SQLiteOpenHelper {
                 RangoDAO.descricao + " TEXT,"  +
                 RangoDAO.foto + " TEXT,"  +
                 RangoDAO.ponto + " TEXT,"  +
-                RangoDAO.tipo + " TEXT"  +
+                RangoDAO.tipo + " TEXT,"  +
+                RangoDAO.lat + " TEXT,"  +
+                RangoDAO.lon + " TEXT"  +
                 " );"
         );
     }

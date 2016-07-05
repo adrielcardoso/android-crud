@@ -9,14 +9,34 @@ public class RangoEntity {
     public String stTipo;
     public String stPonto;
     public String pathFoto;
+    public String lon;
+    public String lat;
+
+    public String getLon() {
+        return lon;
+    }
+
+    public void setLon(String lon) {
+        this.lon = lon;
+    }
+
+    public String getLat() {
+        return lat;
+    }
+
+    public void setLat(String lat) {
+        this.lat = lat;
+    }
 
     public RangoEntity(){}
-    public RangoEntity(String stDescricao, String stTipo, String stPonto, String pathFoto)
+    public RangoEntity(String stDescricao, String stTipo, String stPonto, String pathFoto, String lat, String lon)
     {
         this.stDescricao = stDescricao;
         this.stTipo = stTipo;
         this.stPonto = stPonto;
         this.pathFoto = pathFoto;
+        this.lat = lat;
+        this.lon = lon;
     }
 
     public String getStDescricao() {

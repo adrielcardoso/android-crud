@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/android-crud-with-camera.iml" filepath="$PROJECT_DIR$/android-crud-with-camera.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/aulaPhoto.iml" filepath="$PROJECT_DIR$/aulaPhoto.iml" />
     </modules>
   </component>
 </project>
